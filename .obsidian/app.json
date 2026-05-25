@@ -1,0 +1,14 @@
+{
+  "theme": "obsidian",
+  "baseFontSize": 16,
+  "showLineNumber": true,
+  "alwaysUpdateLinks": true,
+  "newFileLocation": "folder",
+  "newFileFolderPath": "00-Inbox",
+  "attachmentFolderPath": "90-Archive/attachments",
+  "dailyNotes": {
+    "folder": "80-Daily",
+    "format": "YYYY-MM-DD",
+    "template": "70-Templates/Daily Template.md"
+  }
+}
