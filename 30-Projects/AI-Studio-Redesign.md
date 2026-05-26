@@ -140,9 +140,57 @@ GET /api/ai/batch/<job_id>/download
   returns: ZIP file download
 ```
 
----
+#### PHASE 6 — AI Virtual Try-On
+**User flow:** Upload photo of clothing item (on floor/hanging) → select model photo → AI puts clothing on person → export
 
-### UI Redesign — New "AI Studio" Panel
+- [ ] **Garment segmentation** — AI detects and extracts the clothing item from the uploaded photo (built on Phase 1 bg removal + specialized segmentation)
+- [ ] **Pose detection** — AI identifies body landmarks on the model photo
+- [ ] **Garment warping** — AI stretches/fits the clothing to match the body pose, shape, and proportions
+- [ ] **Realistic rendering** — Shadows, fabric folds, natural blending
+- [ ] **Model selection** — Choose from pre-loaded diverse model photos OR upload a custom model photo
+- [ ] **Multi-gender / multi-size** — Try same dress on different body types
+- [ ] **Batch try-on** — Upload one garment, try on 5+ models at once
+
+**How it works (technical):**
+```
+1. User uploads dress photo (flat on floor)
+    ↓
+2. AI segments the dress (rembg + cloth-specific model)
+    ↓
+3. User selects a model photo (pre-loaded or uploads their own)
+    ↓
+4. AI detects pose + body shape on model
+    ↓
+5. Virtual try-on model warps dress onto body
+    ↓
+6. Post-processing: shadow matching, color correction, edge blending
+    ↓
+7. Output: photorealistic image of model wearing the dress
+```
+
+**Recommended AI models for try-on:**
+| Model | Provider | Cost | Quality |
+|-------|----------|------|---------|
+| IDM-VTON | Replicate | ~$0.03/img | ⭐⭐⭐⭐⭐ |
+| HR-VITON | Replicate | ~$0.02/img | ⭐⭐⭐⭐ |
+| ShoeTryOn | Replicate | ~$0.02/img | ⭐⭐⭐ (shoes only) |
+| Custom Flux inpainting | OpenRouter | ~$0.01/img | ⭐⭐⭐ |
+
+**API endpoints to add:**
+```
+POST /api/ai/tryon/<sku>
+  body: { "model_photo": "model_01.jpg" | upload, "garment_image": "..." | null }
+  returns: { "success": true, "url": "...", "before_url": "...", "after_url": "..." }
+
+GET /api/ai/tryon-models
+  returns: { "models": [{ "id": "model_01", "name": "Woman S", "url": "..." }, ...] }
+
+POST /api/ai/tryon-batch/<sku>
+  body: { "model_ids": ["model_01", "model_02", "model_03"] }
+  returns: { "results": [{ "model": "model_01", "url": "..." }, ...] }
+```
+
+#### PHASE 7 — Batch Processing Dashboard
 
 Replace the current image editor's complex tool panels with a clean AI workflow:
 
@@ -164,6 +212,7 @@ Replace the current image editor's complex tool panels with a clean AI workflow:
 │  │   (drag & drop)  │  │ [✨ Auto Enhance]     │ │
 │  │                  │  │ [🎨 Generate Scene]   │ │
 │  │                  │  │ [👕 Create Mockup]    │ │
+│  │                  │  │ [👗 Virtual Try-On]   │ │
 │  │                  │  │ [📱 Social Images]    │ │
 │  │                  │  │ ─────────────────     │ │
 │  │                  │  │ [📦 Batch Process All]│ │
@@ -249,12 +298,12 @@ def ai_studio(sku=None):
 
 **Week 2 — Creative Features**
 6. Implement Phase 3: AI Scene Generation
-7. Implement Phase 4: AI Mockups
+7. Implement Phase 4: AI Mockups + Virtual Try-On (Phase 6)
 8. Implement Phase 5: One-Click Social Media Images
 9. Add progress tracking + preview system
 
 **Week 3 — Batch + Polish**
-10. Implement Phase 6: Batch Processing Dashboard
+10. Implement Phase 7: Batch Processing Dashboard
 11. Add ZIP download for batch results
 12. Mobile optimization pass
 13. End-to-end testing with real products
