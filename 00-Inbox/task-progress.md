@@ -1,86 +1,56 @@
-# Task Progress — Echo
+# Task Progress — Echo (Task Batch 2)
+_Updated: 2026-05-27 ~00:45 EDT_
 
-## Session: 2026-05-27 (Night)
+## Phase 1 — Task Queue System ✅
 
-### ✅ P0 — Storefront (Emporium-and-Thrift-App)
+| Task | Status | Notes |
+|------|--------|-------|
+| 1. Tasks DB schema | ✅ Done | tasks.db, 10 fields |
+| 2. API endpoints | ✅ Done | GET/POST/PUT/DELETE /api/tasks, filters, /api/agents/* |
+| 3. Command Center UI | ✅ Done | Kanban board, task cards, priority colors |
+| 4. Agent Status panel | ✅ Done | Online/offline dots, last heartbeat, current task |
 
-**Task 1: Root URL → Public Homepage**
-- Created `templates/home.html` — full public landing page
-- Hero section, featured products grid (pulls 8 items from DB, image-first)
-- "Shop Now" + "Our Story" CTAs, footer with contact info
-- Stats: live item count + category count from DB
-- `/` no longer login-required; moved dashboard to `/dashboard`
-- Pushed to `main` ✅ Railway auto-deploying
+## Phase 2 — Storefront Enhancement ✅
 
-**Task 2: /about and /contact pages**
-- `templates/about.html` — Liberty Emporium story, values, CTA
-- `templates/public_contact.html` — server-side form, logs to `contact_messages.json`
-- `/contact` route now handles GET + POST (was pointing to `jay_resume.html`)
-- `/about` route added
-- All server-side rendered, no JS required ✅
+| Task | Status | Notes |
+|------|--------|-------|
+| 5. Product detail + Add to Cart | ✅ Done | Button added above interest form on /store/<sku> |
+| 6. Cart + Checkout | ✅ Done | /cart, /cart/add, /checkout, /order-confirmation/<ref> |
+| 7. Order Management | ✅ Done | /admin/orders — list, status update, notes |
+| 8. Search + Filter | ✅ Done | /search SSR — q, category, price_min, price_max, sort |
+| 9. Customer CRM | ✅ Done | /admin/customers — auto-created on checkout |
+| 10. Email Notifications | ✅ Done | smtplib, customer + Jay notification (needs Railway env vars) |
+| 11. AI Studio Verification | ✅ Done | See results below |
 
-**Task 3: SEO + Meta Tags**
-- `home.html` — full OG + description + twitter:card
-- `about.html` — OG + description + canonical
-- `public_contact.html` — OG + description + canonical
-- `store.html` — added description + OG + canonical
-- `store_product.html` — dynamic OG per product (title, description, image)
-- Store logo now links to `/`
-- Store nav: added About + Contact links ✅
+## AI Studio Results (new OpenRouter key)
 
-**Task 4: AI Studio verification**
-- ⏳ Railway deploying new OpenRouter key — will verify after deploy
+| Phase | Status | Notes |
+|-------|--------|-------|
+| 🔴 Remove BG | ✅ **FIXED** | Was timing out. New key fixed it. HTTP 200 |
+| ✨ Enhance | ✅ Working | HTTP 200 |
+| 🌄 Scene | ✅ Working | HTTP 200 |
+| 🪆 Mockup | ✅ Working | HTTP 200 |
+| 📱 Social | ✅ Working | HTTP 200 |
+| 👗 Try-On | ❌ Needs config | "No model photo provided" — needs default model photo set in Railway |
+| ⚡ Batch | ❌ Payload issue | 400 with `{"product_ids":["J-01"],"actions":["enhance"]}` — may need different field names |
 
-**Task 5: /api/health (store app)**
-- Added `GET /api/health` returning `{status, service, version, store, total_items, available, sold, timestamp}`
-- Public, no auth required ✅
+**5/7 working. Remove BG now fixed with new OpenRouter key.** 🎉
 
----
+## Actions Still Needed (Jay)
 
-### ✅ P1 — Dashboard/API Layer (alexander-ai-dashboard, branch: master)
-
-**Task 5: /api/health (dashboard)**
-- Added `GET /api/health` returning `{status: "ok", service: "ecdash", version: "1.0", timestamp}`
-- Pushed to `master` ✅
-
-**Task 6: Master Key Auth Layer**
-- `POST /api/auth` — accepts `MASTER_API_KEY` env var, returns 1-hour bearer token
-- `GET|POST /api/verify` — validates token + checks expiry
-- Built on existing token infrastructure (no new dependencies)
-- ⚠️ Requires `MASTER_API_KEY` env var to be set on Railway dashboard project
-- Pushed to `master` ✅
-
----
-
-### 🟡 P2 — Cleanup/Infra
-
-**Task 7: Heroku audit**
-- ⚠️ No Heroku CLI installed, no Heroku credentials provided
-- Cannot audit without login. Jay to check https://dashboard.heroku.com
-
-**Task 8: Exposed secrets audit**
-- Written to `50-SEO/exposed-secrets-audit.md` ✅
-- Cal.com key: in 4 echo-v1 memory files — ROTATE
-- OpenRouter key: in floodclaim test script — already replaced with new key
-
-**Task 9: Railway cost audit**
-- ⚠️ `railway_token` stored is the **project ID** not an API token
-- Need Railway API token from https://railway.app/account/tokens
-- Cannot query project list without it
-
----
+| Item | What to do |
+|------|-----------|
+| Email config | Set `MAIL_SERVER`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_PORT=587` on Railway (store app) |
+| Master API key | Set `MASTER_API_KEY` on Railway (dashboard app) |
+| Try-On | Upload a default model photo in AI Studio settings |
+| Cal.com key | Rotate at cal.com/settings/developer/api-keys |
+| Batch API | Test with correct payload format — may need `skus` not `product_ids` |
 
 ## Commits This Session
-| Repo | Branch | Commit | Description |
-|------|--------|--------|-------------|
-| Emporium-and-Thrift-App | main | 61cb142 | Public homepage, /about, /contact, SEO, /api/health |
-| alexander-ai-dashboard | master | 01c108e | /api/health, /api/auth, /api/verify |
-| echo-v1 | main | a1671e8 | Obsidian vault location added to MEMORY.md |
-| Obsidian | main | 1a122d2 | OWL-Echo session report |
 
-## Blockers / Needs Jay
-1. **Set `MASTER_API_KEY`** env var on Railway (alexander-ai-dashboard project) to activate auth layer
-2. **Rotate Cal.com key** — in public GitHub history
-3. **Railway API token** — provide from https://railway.app/account/tokens for cost audit
-4. **Heroku credentials** — to audit Heroku apps
-5. **Verify AI Studio** — wait for Railway deploy of new OpenRouter key, then test Remove BG
+| Repo | Branch | Commit | What |
+|------|--------|--------|------|
+| alexander-ai-dashboard | master | Task queue DB + API + Command Center UI + agent heartbeat |
+| Emporium-and-Thrift-App | main | 10f862a | Ecommerce features (cart/checkout/orders/search/email) |
+| Emporium-and-Thrift-App | main | e821ef0 | Fix duplicate /api/health causing 502 crash |
+| Obsidian | main | 43bd3e0 | Evening session docs |
