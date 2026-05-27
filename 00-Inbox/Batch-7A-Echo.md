@@ -1,69 +1,39 @@
-# Echo Task Batch 7A — No Email Required
+# Echo Task Batch 7A — Storefront UX Fixes + Features
 
-## P0 — ADVANCED STOREFRONT (store app, branch: main)
-IMPORTANT: Do NOT take the store down. Your mom is adding products live. Every push must keep the site running.
+## CRITICAL: Do NOT break the live store. Jay's mom is actively adding products.
 
-1. **Advanced CRM — Customer Notes + Follow-ups**:
-   - On /admin/customers, add a "Notes" text area per customer. Admin can write notes like "Called on 5/27 — interested in bulk order."
-   - Add a "Follow-up date" field. At /admin/customers, highlight customers whose follow-up date is today or past due.
-   - Add a "Last contact" auto-timestamp that updates whenever admin adds a note.
+## P0 — UX FIXES (store app, branch: main)
 
-2. **Order Timeline Tracking**:
-   - On the order detail page (/admin/orders/<id>), add a visual timeline: Order Placed → Processing → Shipped → Delivered
-   - Each step shows timestamp when it was marked complete
-   - Customers can see a simplified version at /track-order
-   - When status changes, add a note to the order timeline automatically (e.g., "Status changed to Shipped on 5/27 at 2:15 PM")
+Fix these 4 items Jay found on the live store:
 
-3. **Product Search Autocomplete**:
-   - Add a search bar to the store header (not just /search page)
-   - As customer types, show dropdown with matching product names + thumbnails (AJAX fetch)
-   - Click a result → go to product page
-   - Debounce at 300ms to avoid flooding requests
+1. **Cart icon in header**: Add a cart icon with item count badge to the store header/nav on ALL pages. Clicking goes to /cart. Show cart count badge (red circle with number) that updates via JS.
 
-4. **Store Announcement Banner**:
-   - At /admin/settings, add a "Store Announcement" text field
-   - When filled, shows a colored banner at the top of every store page (admin can set color: green/yellow/red)
-   - Example: "Free shipping on orders over $50 this week!"
-   - Dismissible by customer (saved in session/cookie)
-   - Default: hidden
+2. **Login/Profile in hamburger menu**: 
+   - When logged out: show "Create Account" and "Login" links
+   - When logged in: show "My Orders", "Profile", "Logout" links
+   - On desktop, show a "Hi, [name]!" dropdown in the nav
 
-## P1 — FACEBOOK + MARKETING (store app, branch: main)
-5. **Facebook Marketplace — Phase 2 (Real Posting)**:
-   - Already have the scheduler (/admin/facebook) from Batch 3. Upgrade it.
-   - Add `FB_ACCESS_TOKEN` env var on Railway when Jay provides it
-   - When admin clicks "Post to Facebook", actually post to Facebook via the Graph API
-   - Show success/failure status per post
-   - If no FB_ACCESS_TOKEN is set, show a banner: "Connect Facebook to enable auto-posting" with a setup guide link
+3. **Categories in navigation**: 
+   - Show category links in the hamburger menu and/or the main nav bar
+   - Each category links to /category/<slug>
+   - Only show categories that have at least 1 product
+   - Auto-update the nav when new categories are added via /admin/categories
 
-6. **SEO Structured Data (Schema.org)**:
-   - Add JSON-LD structured data to every product page: Product name, description, price, availability, image, brand (Liberty Emporium), review aggregate
-   - Add Organization schema to homepage
-   - Add BreadcrumbList schema to category and product pages
-   - This makes Google show rich snippets (star ratings, price) in search results
-   - Test with Google's Rich Results Test tool
+4. **Store header cleanup**: Make sure the logo area shows the store name prominently. Keep it clean and professional.
 
-7. **Social Sharing Buttons**:
-   - On every product page, add share buttons: Facebook, Pinterest, Twitter/X, WhatsApp, Email
-   - Each button opens a pre-filled share dialog with product title, image, and link
-   - Small, clean icons — not obtrusive
-   - Mobile: show in a horizontal row below product description
-   - Desktop: show as floating sidebar on left of product image
+## P1 — STOREFRONT FEATURES (store app, branch: main)
 
-## P2 — DASHBOARD (dashboard, branch: master)
-8. **Echo Performance Dashboard**:
-   - Add a "Stats" section to the Command Center showing:
-     - Total tasks completed (from tasks DB)
-     - Tasks per session
-     - Average tasks per hour
-     - Current session task count
-   - Show a simple bar chart (use Chart.js CDN) of tasks per session
-   - Update in real-time as Echo posts completions
+5. **Advanced CRM**: Add customer notes on /admin/customers. Follow-up date field. Highlight overdue follow-ups.
 
-## RULES — CRITICAL
-- ⚠️ DO NOT BREAK THE LIVE STORE. Your mom is actively adding products.
-- After EVERY push, verify the site still loads.
-- If something breaks, IMMEDIATELY revert the commit.
-- Store → main branch. Dashboard → master branch.
-- POST completions to /api/tasks.
-- Write progress to 80-Daily/2026-05-28.md in Obsidian.
-- Do NOT touch Sweet Spot Cakes repo.
+6. **Order Timeline**: Visual timeline on /admin/orders/<id> (Placed → Processing → Shipped → Delivered). Auto-note on status change.
+
+7. **Search Autocomplete**: Search bar in store header. Dropdown with product names + thumbnails. Debounce 300ms.
+
+8. **Announcement Banner**: At /admin/settings. Color picker (green/yellow/red). Shows banner on all store pages. Customer can dismiss.
+
+## RULES
+- Store → main branch
+- Verify after EACH push
+- POST completions to /api/tasks
+- Write to 80-Daily/2026-05-27.md in Obsidian
+- Don't break existing features
