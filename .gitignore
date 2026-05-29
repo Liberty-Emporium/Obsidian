@@ -11,3 +11,7 @@ Thumbs.db
 *.tmp
 *.swp
 *~
+
+# Credential/note files with potential secrets
+20-Clients/Credential-Notes.md
+00-Inbox/OWL-Working-Notes-May27.md
