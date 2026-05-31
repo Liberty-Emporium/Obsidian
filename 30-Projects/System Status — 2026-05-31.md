@@ -1,6 +1,6 @@
 # 📊 System Status — 2026-05-31
 
-> Auto-generated at 2026-05-31 05:08
+> Auto-generated at 2026-05-31 13:22
 
 ## Railway Apps
 
@@ -14,7 +14,7 @@
 | **Contractor Pro AI** | `contractor-pro-ai-production.up.railway.app` | 🟢 |
 | **Dropship Shipping** | `dropship-shipping-production.up.railway.app` | 🟢 |
 | **Consignment Solutions** | `web-production-43ce4.up.railway.app` | 🟢 |
-| **EcDash / Portfolio** | `jay-portfolio-production.up.railway.app` | 🟢 |
+| **EcDash / Portfolio** | `jay-portfolio-production.up.railway.app` | 🔴 |
 | **Support Dashboard** | `agents.alexanderai.site` | 🟢 |
 
 ## Legend
